@@ -63,7 +63,7 @@ public class FacultyMenu extends JFrame {
                 new AddStudent(username);
                 break;
             case "Add Student Attendance":
-                // addStudentAttendance();
+                new AddAttendance("faculty1");
                 break;
             case "Update Student Information":
                 // updateStudentInformation();

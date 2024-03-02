@@ -1,94 +1,213 @@
 package faculty;
+import com.toedter.calendar.JDateChooser;
+
+import common.SQL;
+import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import com.toedter.calendar.JDateChooser;
+import java.util.List;
 
 public class AddAttendance extends JFrame {
 
-    private final String[] courses = {"Java Programming", "Web Development", "Cyber Security", "Optimization Techniques", "Computer Networks"};
-    private final String[] attendanceStatus = {"Absent", "Present"};
+    private JComboBox<String> subjectDropdown;
+    private JDateChooser dateChooser;
+    private List<String> studentList;
+    private List<JCheckBox> presentCheckboxes;
+    private List<JCheckBox> absentCheckboxes;
 
-    public AddAttendance() {
+    public AddAttendance(String username) {
         setTitle("Add Attendance");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(7, 2));
-        setPreferredSize(new Dimension(400, 300));
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(600, 400));
 
-        JLabel usernameLabel = new JLabel("Username of the Student:");
-        JTextField usernameField = new JTextField();
+        subjectDropdown = new JComboBox<>(getSubjectList());
+        dateChooser = new JDateChooser();
+        studentList = getAllStudents();
+        presentCheckboxes = new ArrayList<>();
+        absentCheckboxes = new ArrayList<>();
 
-        JLabel courseLabel = new JLabel("Course:");
-        JComboBox<String> courseDropdown = new JComboBox<>(courses);
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new JLabel("Select Subject:"));
+        topPanel.add(subjectDropdown);
+        topPanel.add(new JLabel("Select Date:"));
+        topPanel.add(dateChooser);
 
-        JLabel dateLabel = new JLabel("Date of Attendance:");
-        JDateChooser dateChooser = new JDateChooser();
+        add(topPanel, BorderLayout.NORTH);
 
-        JLabel statusLabel = new JLabel("Status:");
-        JComboBox<String> statusDropdown = new JComboBox<>(attendanceStatus);
+        JPanel checkboxesPanel = new JPanel();
+        checkboxesPanel.setLayout(new GridBagLayout());
+        JScrollPane checkboxesScrollPane = new JScrollPane(checkboxesPanel);
+        add(checkboxesScrollPane, BorderLayout.CENTER);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Column 0 for student names
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5); // Add padding
+
+        presentCheckboxes = new ArrayList<>();
+        absentCheckboxes = new ArrayList<>();
+
+        // Define a larger font size
+        Font largerFont = new Font("Arial", Font.PLAIN, 16);
+
+        // Add student names and checkboxes
+        for (String student : studentList) {
+            gbc.gridy++;
+            checkboxesPanel.add(new JLabel(student), gbc);
+
+            gbc.gridx = 1; // Column 1 for checkboxes
+            JCheckBox presentCheckbox = new JCheckBox("Present");
+            presentCheckbox.setFont(largerFont);
+            presentCheckboxes.add(presentCheckbox);
+            
+            JCheckBox absentCheckbox = new JCheckBox("Absent");
+            absentCheckbox.setFont(largerFont);
+            absentCheckboxes.add(absentCheckbox);
+
+            // Group checkboxes for mutual exclusion
+            ButtonGroup checkboxGroup = new ButtonGroup();
+            checkboxGroup.add(presentCheckbox);
+            checkboxGroup.add(absentCheckbox);
+
+            checkboxesPanel.add(presentCheckbox, gbc);
+            gbc.fill = GridBagConstraints.HORIZONTAL; // Fill horizontal space
+
+            gbc.gridx = 2; 
+            checkboxesPanel.add(absentCheckbox, gbc);
+            gbc.fill = GridBagConstraints.HORIZONTAL; // Fill horizontal space
+
+            gbc.gridx = 0; // Reset to column 0 for the next student name
+        }
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        add(bottomPanel, BorderLayout.SOUTH);
 
         JButton addButton = new JButton("Add Attendance");
         JButton cancelButton = new JButton("Cancel");
 
+        bottomPanel.add(cancelButton);
+        bottomPanel.add(addButton);
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
-                String course = (String) courseDropdown.getSelectedItem();
-                Date date = dateChooser.getDate();
-                String status = (String) statusDropdown.getSelectedItem();
-
-                if (username.isEmpty() || date == null) {
-                    JOptionPane.showMessageDialog(null, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // TODO: Add logic to insert attendance data into the database
-
-                // For now, let's just print the values
-                System.out.println("Username: " + username);
-                System.out.println("Course: " + course);
-                System.out.println("Date: " + date);
-                System.out.println("Status: " + status);
-
-                // Close the frame
-                dispose();
-            }
-        });
+                System.out.println("Adding Student");
+                addStudent();
+            }});
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Close the frame
-                dispose();
+                dispose(); 
+                new FacultyMenu(username);
             }
         });
-
-        add(usernameLabel);
-        add(usernameField);
-        add(courseLabel);
-        add(courseDropdown);
-        add(dateLabel);
-        add(dateChooser);
-        add(statusLabel);
-        add(statusDropdown);
-        add(addButton);
-        add(cancelButton);
 
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
+    private String[] getSubjectList() {
+        // Modify this method to fetch subject data from the database
+        return new String[]{"Java Programming", "Web Development", "Cyber Security", "Optimization Techniques", "Computer Networks", "Operating System"};
+    }
+
+    private List<String> getAllStudents() {
+        List<String> usernames = new ArrayList<>();
+        try(Connection c = SQL.makeConnection();
+        PreparedStatement ps = c.prepareStatement("select username from student");){
+            String username;
+
+            ResultSet r = ps.executeQuery();
+
+            while(r.next()){
+                username = r.getString("username");
+                usernames.add(username);
+            }
+            
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this,e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return usernames;
+    }
+
+    private void addStudent(){
+        String selectedSubject = (String) subjectDropdown.getSelectedItem();
+                Date selectedDate = dateChooser.getDate();
+
+                if (selectedSubject == null || selectedDate == null) {
+                    JOptionPane.showMessageDialog(null, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                System.out.println("Subject: " + selectedSubject);
+                System.out.println("Date: " + dateFormat.format(selectedDate));
+
+                boolean isAnyCheckboxSelected = false;
+
+                for (int i = 0; i < studentList.size(); i++) {
+                    String student = studentList.get(i);
+                    JCheckBox presentCheckbox = presentCheckboxes.get(i);
+                    JCheckBox absentCheckbox = absentCheckboxes.get(i);
+                    String status = "Absent";
+
+                    if (presentCheckbox.isSelected()) {
+                        System.out.println(student + ": Present");
+                        status = "Present";
+                        isAnyCheckboxSelected = true;
+                    } else if (absentCheckbox.isSelected()) {
+                        System.out.println(student + ": Absent");
+                        status = "Absent";
+                        isAnyCheckboxSelected = true;
+                    }
+                    addStudentToDatabase(student, selectedDate, selectedSubject, status);
+                }
+
+                if (!isAnyCheckboxSelected) {
+                    JOptionPane.showMessageDialog(null, "Please select Present or Absent for at least one student.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                dispose();
+    }
+
+    private void addStudentToDatabase(String username, Date date, String course, String status) {
+        try (Connection c = SQL.makeConnection();
+                PreparedStatement ps = c.prepareStatement("INSERT INTO attendance(username, course_id, date, status) VALUES (?, ?, ?, ?)")) {
+    
+            ps.setString(1, username);
+            ps.setString(2, course);
+            ps.setDate(3, new java.sql.Date(date.getTime())); // Convert java.util.Date to java.sql.Date
+            ps.setString(4, status);
+    
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected < 0) {
+                System.out.println("Attendance not added");
+            } else {
+                System.out.println("Attendance added");
+            }
+    
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+            
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new AddAttendance();
+                new AddAttendance("faculty1");
             }
         });
     }
