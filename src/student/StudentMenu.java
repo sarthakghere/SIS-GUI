@@ -56,7 +56,7 @@ public class StudentMenu extends JFrame{
                 new ViewGrades();
                 break;
             case "View Attendance":
-                new ViewAttendance();
+                new ViewAttendance(username);
                 break;
             case "Change Password":
                 new common.ChangePassword(username);
