@@ -4,48 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3bd09b4e-5c5f-40fb-a034-998cdba08267" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/SIS-GUI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SIS-GUI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/.classpath" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/Auth.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/ChangePassword$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/ChangePassword$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/ChangePassword.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/Hashing.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/LoginWindow$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/LoginWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/Logout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/common/SQL.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/AddAttendance$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/AddAttendance$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/AddAttendance$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/AddAttendance.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/AddStudent$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/AddStudent$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/AddStudent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/FacultyMenu$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/FacultyMenu.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/UpdateStudent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewInformation$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewInformation$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewInformation.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewStudents$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewStudents$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewStudents$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewStudents.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/StudentMenu$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/StudentMenu.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/ViewAttendance$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/ViewAttendance$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/ViewAttendance.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/ViewGrades.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/ViewInformation$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/ViewInformation$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/student/ViewInformation.class" beforeDir="false" />
-    </list>
+    <list default="true" id="3bd09b4e-5c5f-40fb-a034-998cdba08267" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

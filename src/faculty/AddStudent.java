@@ -1,21 +1,21 @@
 package faculty;
 
+import com.toedter.calendar.JDateChooser;
+import common.SQL;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.awt.*;
-import javax.swing.*;
-import java.sql.Date;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import common.SQL;
-
-public class AddStudent extends JFrame{
+public class AddStudent extends JFrame {
     String username;
+
     public AddStudent(String username) {
         this.username = username;
         JFrame addStudentFrame = new JFrame("Add Student");
@@ -28,8 +28,8 @@ public class AddStudent extends JFrame{
         JTextField emailField = new JTextField();
         JTextField phoneField = new JTextField();
         JTextField usernameField = new JTextField();
-        JTextField birthdateField = new JTextField();
-        JTextField enrollmentDateField = new JTextField();
+        JDateChooser birthdateChooser = new JDateChooser();
+        JDateChooser enrollmentDateChooser = new JDateChooser();
 
         JButton addButton = new JButton("Add Student");
         JButton cancelButton = new JButton("Cancel");
@@ -44,10 +44,10 @@ public class AddStudent extends JFrame{
         addStudentFrame.add(phoneField);
         addStudentFrame.add(new JLabel("Username:"));
         addStudentFrame.add(usernameField);
-        addStudentFrame.add(new JLabel("Birthdate (YYYY-MM-DD):"));
-        addStudentFrame.add(birthdateField);
-        addStudentFrame.add(new JLabel("Enrollment Date (YYYY-MM-DD):"));
-        addStudentFrame.add(enrollmentDateField);
+        addStudentFrame.add(new JLabel("Birthdate:"));
+        addStudentFrame.add(birthdateChooser);
+        addStudentFrame.add(new JLabel("Enrollment Date:"));
+        addStudentFrame.add(enrollmentDateChooser);
         addStudentFrame.add(addButton);
         addStudentFrame.add(cancelButton);
 
@@ -59,31 +59,31 @@ public class AddStudent extends JFrame{
                 String email = emailField.getText();
                 String phone = phoneField.getText();
                 String username = usernameField.getText();
-                String birthdate = birthdateField.getText();
-                String enrollmentDate = enrollmentDateField.getText();
+                java.util.Date birthdate = birthdateChooser.getDate();
+                java.util.Date enrollmentDate = enrollmentDateChooser.getDate();
 
                 if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phone.isEmpty()
-                || username.isEmpty() || birthdate.isEmpty() || enrollmentDate.isEmpty()) {
+                        || username.isEmpty() || birthdate == null || enrollmentDate == null) {
                     JOptionPane.showMessageDialog(addStudentFrame, "All fields must be filled out", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;  // Stop further execution if any field is empty
+                    return;
                 }
                 if (!phone.matches("\\d+")) {
                     JOptionPane.showMessageDialog(addStudentFrame, "Phone No. must contain only digits", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;  // Stop further execution if Phone No. contains non-digit characters
+                    return;
                 }
                 if (!isValidDateFormat(birthdate) || !isValidDateFormat(enrollmentDate)) {
                     JOptionPane.showMessageDialog(addStudentFrame, "Invalid date format. Please use YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;  // Stop further execution if date format is invalid
+                    return;
                 }
 
                 if (birthdate.equals(enrollmentDate)) {
                     JOptionPane.showMessageDialog(addStudentFrame, "Birthdate and Enrollment Date cannot be the same", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;  // Stop further execution if birthdate and enrollmentDate are the same
+                    return;
                 }
 
                 if (isUsernameExists(username)) {
                     JOptionPane.showMessageDialog(addStudentFrame, "Username already exists. Please choose a different username", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;  // Stop further execution if username already exists
+                    return;
                 }
 
                 addStudentToDatabase(firstName, lastName, email, phone, username, birthdate, enrollmentDate);
@@ -106,30 +106,22 @@ public class AddStudent extends JFrame{
         addStudentFrame.setVisible(true);
     }
 
-    private boolean isValidDateFormat(String date) {
+    private boolean isValidDateFormat(java.util.Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);  // Disallow lenient parsing
-    
+        dateFormat.setLenient(false);
+
         try {
-            dateFormat.parse(date);
+            dateFormat.format(date);
             return true;
-        } catch (ParseException e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
     private void addStudentToDatabase(String firstName, String lastName, String email, String phone,
-                                      String username, String birthdate, String enrollmentDate) {
-        Date bday = null, enroll = null;
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-            bday = new java.sql.Date(dateFormat.parse(birthdate).getTime());
-            enroll = new java.sql.Date(dateFormat.parse(enrollmentDate).getTime());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Error parsing date: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+                                      String username, java.util.Date birthdate, java.util.Date enrollmentDate) {
+        java.sql.Date bday = new java.sql.Date(birthdate.getTime());
+        java.sql.Date enroll = new java.sql.Date(enrollmentDate.getTime());
 
         try (Connection c = SQL.makeConnection();
              PreparedStatement ps = c.prepareStatement("INSERT INTO student(first_name, last_name, email, phone_number, username, birthdate, enrollment_date) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
@@ -138,14 +130,8 @@ public class AddStudent extends JFrame{
             ps.setString(3, email);
             ps.setString(4, phone);
             ps.setString(5, username);
-            ps.setDate(6, (java.sql.Date) bday);
-
-            if (enroll != null) {
-                ps.setDate(7, (java.sql.Date) enroll);
-            } else {
-                // Handle the case when enroll is still null
-                ps.setNull(7, java.sql.Types.DATE);
-            }
+            ps.setDate(6, bday);
+            ps.setDate(7, enroll);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -167,16 +153,18 @@ public class AddStudent extends JFrame{
     }
 
     private boolean isUsernameExists(String username) {
-    try (Connection c = SQL.makeConnection();
-         PreparedStatement ps = c.prepareStatement("SELECT * FROM user WHERE username = ?")) {
-        ps.setString(1, username);
-        try (ResultSet rs = ps.executeQuery()) {
-            return rs.next();  // Return true if username exists in the result set
+        try (Connection c = SQL.makeConnection();
+             PreparedStatement ps = c.prepareStatement("SELECT * FROM user WHERE username = ?")) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "SQL Error " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "SQL Error " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        return true;  // Assume username exists in case of an exception
     }
-}
-
+    public static void main(String[] args) {
+        new AddStudent("faculty1");
+    }
 }
