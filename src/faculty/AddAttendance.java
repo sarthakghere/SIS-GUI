@@ -115,9 +115,25 @@ public class AddAttendance extends JFrame {
         setVisible(true);
     }
 
-    private String[] getSubjectList() {
-        // Modify this method to fetch subject data from the database
-        return new String[]{"Java Programming", "Web Development", "Cyber Security", "Optimization Techniques", "Computer Networks", "Operating System"};
+    public static String[] getSubjectList() {
+        String[] subjectStrings = null;
+        try (Connection c = SQL.makeConnection();
+        PreparedStatement ps = c.prepareStatement("select * from course")){
+            ResultSet r = ps.executeQuery();
+            ArrayList<String> subs = new ArrayList<>();
+            while(r.next()){
+                String subName = r.getString("course_name");
+                subs.add(subName);
+            }
+            subjectStrings = new String[subs.size()];
+            subs.toArray(subjectStrings);
+
+
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return subjectStrings;
     }
 
     private List<String> getAllStudents() {
