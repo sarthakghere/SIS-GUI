@@ -8,8 +8,10 @@ import java.util.Properties;
 public class SQL {
     public static Connection makeConnection() throws Exception {
         Properties properties = new Properties();
-
         try (InputStream input = SQL.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                throw new Exception("config.properties not found");
+            }
             properties.load(input);
         }
 
