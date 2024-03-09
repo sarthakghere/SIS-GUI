@@ -1,18 +1,47 @@
+# Student Information System (SIS)
+
+## Description
+
+The Student Information System (SIS) is a Java GUI application developed as a minor project for college. The system provides a user-friendly interface for both faculty and students to manage student-related information, including attendance, grades, and general student details.
+
+## Table of Contents
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+- Student Registration: Faculty can register new students, capturing essential information like name, email, phone number, birthdate, and enrollment date.
+
+- View All Students: Faculty can view a list of all registered students with detailed information, including their personal details.
+
+- Change Password: Users (faculty or students) can change their passwords securely within the application.
+
+- Attendance Management: Faculty can mark attendance for students, specifying the subject, date, and attendance status (present or absent).
+
+- Grade Management: Faculty can input and manage student grades for different tests, such as CES (Continuous Evaluation Scheme) and Internals.
+
+- Dynamic GUI: The graphical user interface dynamically adjusts to display relevant options based on the user's role (faculty or student).
+
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Provide instructions on how to set up the project locally.
 
-## Folder Structure
+### Prerequisites
 
-The workspace contains two folders by default, where:
+- [JDK](https://www.oracle.com/in/java/technologies/downloads/)
+- [MySql Connector](https://dev.mysql.com/downloads/connector/j/) 
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+### Installation
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Step-by-step guide on how to install and run the project.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Usage
 
-## Dependency Management
+- Faculty members can log in to the system to manage student-related activities.
+- Students can access their own information, including attendance records and grades.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
