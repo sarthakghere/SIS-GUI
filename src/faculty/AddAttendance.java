@@ -199,7 +199,7 @@ public class AddAttendance extends JFrame {
 
     private void addStudentToDatabase(String username, Date date, String course, String status) {
         try (Connection c = SQL.makeConnection();
-                PreparedStatement ps = c.prepareStatement("INSERT INTO attendance(username, course_id, date, status) VALUES (?, ?, ?, ?)")) {
+                PreparedStatement ps = c.prepareStatement("INSERT INTO attendance(username, course_name, date, status) VALUES (?, ?, ?, ?)")) {
     
             ps.setString(1, username);
             ps.setString(2, course);

@@ -2,7 +2,6 @@ package faculty;
 
 import com.toedter.calendar.JDateChooser;
 import common.SQL;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -90,6 +89,7 @@ public class AddStudent extends JFrame {
 
                 // Close the addStudentFrame
                 addStudentFrame.dispose();
+                new FacultyMenu(username);
             }
         });
 
@@ -98,6 +98,7 @@ public class AddStudent extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Close the addStudentFrame
                 addStudentFrame.dispose();
+                new FacultyMenu(username);
             }
         });
 
@@ -124,24 +125,27 @@ public class AddStudent extends JFrame {
         java.sql.Date enroll = new java.sql.Date(enrollmentDate.getTime());
 
         try (Connection c = SQL.makeConnection();
-             PreparedStatement ps = c.prepareStatement("INSERT INTO student(first_name, last_name, email, phone_number, username, birthdate, enrollment_date) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-            ps.setString(1, firstName);
-            ps.setString(2, lastName);
-            ps.setString(3, email);
-            ps.setString(4, phone);
-            ps.setString(5, username);
-            ps.setDate(6, bday);
-            ps.setDate(7, enroll);
-
-            int rowsAffected = ps.executeUpdate();
+        PreparedStatement userTable = c.prepareStatement("INSERT INTO user(username, role) VALUES (?, ?)");) {
+                
+            userTable.setString(1, username);
+            userTable.setString(2, "student");
+            int rowsAffected = userTable.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Student Added!");
-                PreparedStatement userTable = c.prepareStatement("INSERT INTO user(username, role) VALUES (?, ?)");
-                userTable.setString(1, username);
-                userTable.setString(2, "student");
-                userTable.executeUpdate();
-                JOptionPane.showMessageDialog(this, "Student Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                userTable.close();
                 System.out.println("User Generated!");
+                PreparedStatement ps = c.prepareStatement("INSERT INTO student(first_name, last_name, email, phone_number, username, birthdate, enrollment_date) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                ps.setString(1, firstName);
+                ps.setString(2, lastName);
+                ps.setString(3, email);
+                ps.setString(4, phone);
+                ps.setString(5, username);
+                ps.setDate(6, bday);
+                ps.setDate(7, enroll);
+                ps.executeUpdate();
+                ps.close();
+                System.out.println("Student Added!");
+                JOptionPane.showMessageDialog(this, "Student Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                
             } else {
                 System.out.println("Failed to add student.");
             }

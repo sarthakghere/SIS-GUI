@@ -20,6 +20,7 @@ public class FacultyMenu extends JFrame {
         JButton viewInfoButton = createStyledButton("View Information");
         JButton viewAllStudentsButton = createStyledButton("View All Students");
         JButton addStudentButton = createStyledButton("Add Student");
+        JButton addGradeButton = createStyledButton("Add Student Grade");
         JButton addStudentAttendanceButton = createStyledButton("Add Student Attendance");
         JButton updateStudentInfoButton = createStyledButton("Update Student Information");
         JButton changePasswordButton = createStyledButton("Change Password");
@@ -28,6 +29,7 @@ public class FacultyMenu extends JFrame {
         add(viewInfoButton);
         add(viewAllStudentsButton);
         add(addStudentButton);
+        add(addGradeButton);
         add(addStudentAttendanceButton);
         add(updateStudentInfoButton);
         add(changePasswordButton);
@@ -61,6 +63,9 @@ public class FacultyMenu extends JFrame {
                 break;
             case "Add Student":
                 new AddStudent(username);
+                break;
+            case "Add Student Grade":
+                new AddGrade();
                 break;
             case "Add Student Attendance":
                 new AddAttendance("faculty1");

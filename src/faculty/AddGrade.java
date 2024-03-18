@@ -1,259 +1,181 @@
 package faculty;
-
-import java.awt.event.ActionEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
+import com.toedter.calendar.JDateChooser;
 import common.SQL;
 
-public class AddGrade extends JFrame{
-    private com.toedter.calendar.JDateChooser DateChooser;
-    private javax.swing.JPanel buttonPanel;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel dateLabel;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel middlePanel;
-    private javax.swing.JButton submitButton;
-    private javax.swing.JComboBox<String> testChooser;
-    private javax.swing.JPanel topPanel;
-    private final String username;
+import javax.swing.*;
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-    public AddGrade(String username){
-        this.username = username;
+public class AddGrade extends JFrame {
+    private JComboBox<String> courseComboBox;
+    private JComboBox<String> testComboBox;
+    private JDateChooser dateChooser;
+    private List<String> studentList;
+    private List<JTextField> gradeFields;
 
-        jPanel3 = new javax.swing.JPanel();
-        topPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>(getSubjects());
-        jLabel2 = new javax.swing.JLabel();
-        testChooser = new javax.swing.JComboBox<>();
-        dateLabel = new javax.swing.JLabel();
-        DateChooser = new com.toedter.calendar.JDateChooser();
-        middlePanel = new javax.swing.JPanel();
-        buttonPanel = new javax.swing.JPanel();
-        cancelButton = new javax.swing.JButton();
-        submitButton = new javax.swing.JButton();
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    public AddGrade() {
         setTitle("Add Grade");
-        setResizable(false);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(600, 400));
 
-        topPanel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        courseComboBox = new JComboBox<>(getCourseList());
+        testComboBox = new JComboBox<>(new String[]{"CES 1", "CES 2", "Internal 1", "Internal 2"});
+        dateChooser = new JDateChooser();
+        studentList = getAllStudents();
+        gradeFields = new ArrayList<>();
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel1.setText("Subject:");
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new JLabel("Select Course:"));
+        topPanel.add(courseComboBox);
+        topPanel.add(new JLabel("Select Test:"));
+        topPanel.add(testComboBox);
+        topPanel.add(new JLabel("Select Date:"));
+        topPanel.add(dateChooser);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel2.setText("Test Type:");
+        add(topPanel, BorderLayout.NORTH);
 
-        testChooser.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CES 1", "CES 2", "Internal 1", "Internal 2" }));
+        JPanel middlePanel = new JPanel(new GridLayout(studentList.size(), 2));
+        middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        dateLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        dateLabel.setText("Date:");
+        Font studentFont = new Font("Arial", Font.PLAIN, 14);
 
-        DateChooser.setDateFormatString("yyyy-MM-dd");
-        DateChooser.setMaxSelectableDate(new java.util.Date(253370748679000L));
+        for (String student : studentList) {
+            JLabel nameLabel = new JLabel(student);
+            nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            nameLabel.setFont(studentFont);
+            middlePanel.add(nameLabel);
 
-        javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
-        topPanel.setLayout(topPanelLayout);
-        topPanelLayout.setHorizontalGroup(
-            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPanelLayout.createSequentialGroup()
-                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(topPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(testChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(topPanelLayout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(dateLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        topPanelLayout.setVerticalGroup(
-            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(testChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(dateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(DateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-
-        middlePanel.setBorder(new javax.swing.border.MatteBorder(null));
-
-        javax.swing.GroupLayout middlePanelLayout = new javax.swing.GroupLayout(middlePanel);
-        middlePanel.setLayout(middlePanelLayout);
-        middlePanelLayout.setHorizontalGroup(
-            middlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 448, Short.MAX_VALUE)
-        );
-        middlePanelLayout.setVerticalGroup(
-            middlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 305, Short.MAX_VALUE)
-        );
-
-        middlePanel.setLayout(new GridLayout(0, 2, 0, 5));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0; // Column 0 for student names
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
-
-        String[] usernames = getStudent();
-        ArrayList<JTextField> markFields = new ArrayList<>();
-
-        for(String user:usernames){
-            gbc.gridy++;
-            JLabel student = new JLabel(user);
-            EmptyBorder border = new EmptyBorder(10,20,0,10);
-            student.setBorder(border);
-            middlePanel.add(student);
-
-            gbc.gridx = 1;
-            JTextField marksField = new JTextField();
-            EmptyBorder fieldBorder = new EmptyBorder(10,10,0,20);
-            marksField.setBorder(fieldBorder);
-            middlePanel.add(marksField);
-            markFields.add(marksField);
-
-            gbc.gridx = 0;
+            JTextField gradeField = new JTextField();
+            gradeField.setPreferredSize(new Dimension(100, 20)); // Adjust the width and height as needed
+            gradeFields.add(gradeField);
+            middlePanel.add(gradeField);
         }
 
-        cancelButton.setText("Cancel");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
+        JScrollPane scrollPane = new JScrollPane(middlePanel);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton cancelButton = new JButton("Cancel");
+        JButton submitButton = new JButton("Submit");
+
+        // Add action listener to the submit button
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    addGradesToDatabase();
+                    JOptionPane.showMessageDialog(null, "Grades added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error while adding grades: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
-        submitButton.setText("Submit");
-
-        javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
-        buttonPanel.setLayout(buttonPanelLayout);
-        buttonPanelLayout.setHorizontalGroup(
-            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        buttonPanelLayout.setVerticalGroup(
-            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                    .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(topPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(middlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(topPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(middlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        bottomPanel.add(cancelButton);
+        bottomPanel.add(submitButton);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    public static String[] getSubjects() {
-        String[] subjectStrings = null;
-        try (Connection c = SQL.makeConnection();
-        PreparedStatement ps = c.prepareStatement("select * from course")){
-            ResultSet r = ps.executeQuery();
-            ArrayList<String> subs = new ArrayList<>();
-            while(r.next()){
-                String subName = r.getString("course_name");
-                subs.add(subName);
+    private String[] getCourseList() {
+        ArrayList<String> subs = new ArrayList<>();
+        String[] subArray = null;
+        try(Connection c = SQL.makeConnection();
+        PreparedStatement ps = c.prepareStatement("select course_name from course");){
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                subs.add(resultSet.getString("course_name"));
             }
-            subjectStrings = new String[subs.size()];
-            subs.toArray(subjectStrings);
+            subArray = new String[subs.size()];
+            subs.toArray(subArray);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return subArray;
+    }
 
-
+    private List<String> getAllStudents() {
+        ArrayList<String> students = new ArrayList<>();
+        try (Connection c = SQL.makeConnection();
+        PreparedStatement ps = c.prepareStatement("select username from student")){
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                students.add(resultSet.getString("username"));
+            }
             
         } catch (Exception e) {
             // TODO: handle exception
         }
-        return subjectStrings;
+        System.out.println(students);
+        return students; 
     }
 
-    public static String[] getStudent() {
-        String[] usernameArray = null;
-        try (Connection c = SQL.makeConnection();
-        PreparedStatement ps = c.prepareStatement("select * from student")){
-            ResultSet r = ps.executeQuery();
-            ArrayList<String> subs = new ArrayList<>();
-            while(r.next()){
-                String subName = r.getString("username");
-                subs.add(subName);
+    private void addGradesToDatabase() throws Exception {
+        try (Connection c = SQL.makeConnection()) {
+            String course = (String) courseComboBox.getSelectedItem();
+            String test = (String) testComboBox.getSelectedItem();
+    
+            for (int i = 0; i < studentList.size(); i++) {
+                String student = studentList.get(i);
+                int grade = Integer.parseInt(gradeFields.get(i).getText());
+    
+                // Fetch course_id from the course table
+                String courseIdQuery = "SELECT course_id FROM course WHERE course_name = ?";
+                try (PreparedStatement courseIdPs = c.prepareStatement(courseIdQuery)) {
+                    courseIdPs.setString(1, course);
+                    ResultSet courseIdRs = courseIdPs.executeQuery();
+                    if (courseIdRs.next()) {
+                        String courseId = courseIdRs.getString("course_id");
+    
+                        // Fetch student_id from the student table
+                        String studentIdQuery = "SELECT student_id FROM student WHERE username = ?";
+                        try (PreparedStatement studentIdPs = c.prepareStatement(studentIdQuery)) {
+                            studentIdPs.setString(1, student);
+                            ResultSet studentIdRs = studentIdPs.executeQuery();
+                            if (studentIdRs.next()) {
+                                String studentId = studentIdRs.getString("student_id");
+    
+                                // Insert grade record into the database
+                                String insertQuery = "INSERT INTO grades(course_id, student_id, grade, username, Type) VALUES (?, ?, ?, ?, ?)";
+                                try (PreparedStatement ps = c.prepareStatement(insertQuery)) {
+                                    ps.setString(1, courseId);
+                                    ps.setString(2, studentId);
+                                    ps.setInt(3, grade);
+                                    ps.setString(4, student);
+                                    ps.setString(5, test);
+    
+                                    int rowsAffected = ps.executeUpdate();
+                                    if (rowsAffected > 0) {
+                                        System.out.println("Grade added");
+                                    } else {
+                                        System.out.println("Failed to add grade");
+                                    }
+                                }
+                            } else {
+                                System.out.println("Student not found");
+                            }
+                        }
+                    } else {
+                        System.out.println("Course not found");
+                    }
+                }
             }
-            usernameArray = new String[subs.size()];
-            subs.toArray(usernameArray);
-
-
-            
-        } catch (Exception e) {
-            // TODO: handle exception
         }
-        return usernameArray;
     }
-
-    private void cancelButtonActionPerformed(ActionEvent e){
-        dispose();
-        new FacultyMenu(username);
-    }
+    
 
     public static void main(String[] args) {
-        new AddGrade("faculty1");
+        SwingUtilities.invokeLater(AddGrade::new);
     }
-
 }

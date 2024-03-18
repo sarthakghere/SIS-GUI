@@ -9,14 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.*;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import common.SQL;
 
@@ -25,6 +17,7 @@ public class ViewStudents extends JFrame {
     private DefaultTableModel tableModel;
 
     public ViewStudents(String username) {
+        
         try (Connection c = SQL.makeConnection();
              PreparedStatement ps = c.prepareStatement("SELECT * FROM student")) {
 
@@ -64,7 +57,7 @@ public class ViewStudents extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     infoDialog.dispose(); // Close the dialog
-                    // Additional actions for Back button if needed
+                    new FacultyMenu(username);
                 }
             });
 
@@ -106,15 +99,11 @@ public class ViewStudents extends JFrame {
             buttonPanel.add(backButton);
             buttonPanel.add(exitButton);
 
-            // Add button panel to the dialog
-            infoDialog.add(buttonPanel, BorderLayout.SOUTH);
-
-            // Increase the size of the window
-            infoDialog.setSize(600, 400);
-
-            infoDialog.pack();
+            /// Set the size of the window
+            infoDialog.setSize(1290, 530);
             infoDialog.setLocationRelativeTo(this); // Center the dialog relative to the main frame
             infoDialog.setVisible(true);
+
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "SQL Error while viewing all students: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -122,9 +111,10 @@ public class ViewStudents extends JFrame {
             JOptionPane.showMessageDialog(this, "Error while viewing all students: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     private void removeStudent(String studentUsername) {
         try (Connection c = SQL.makeConnection();
-             PreparedStatement ps = c.prepareStatement("DELETE FROM student WHERE username = ?")) {
+             PreparedStatement ps = c.prepareStatement("DELETE FROM user WHERE username = ?")) {
             ps.setString(1, studentUsername);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -140,15 +130,15 @@ public class ViewStudents extends JFrame {
     private void refreshTable(DefaultTableModel tableModel) {
         try (Connection c = SQL.makeConnection();
              PreparedStatement ps = c.prepareStatement("SELECT * FROM student")) {
-    
+
             ResultSet resultSet = ps.executeQuery();
-    
+
             // Remove all rows from the table model
             tableModel.setRowCount(0);
-    
+
             // Get the number of columns in the result set
             int columnCount = resultSet.getMetaData().getColumnCount();
-    
+
             // Add rows to the table model
             while (resultSet.next()) {
                 Object[] rowData = new Object[columnCount];
@@ -157,7 +147,7 @@ public class ViewStudents extends JFrame {
                 }
                 tableModel.addRow(rowData);
             }
-    
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "SQL Error while refreshing table: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
@@ -184,6 +174,8 @@ public class ViewStudents extends JFrame {
 
         return usernames;
     }
-    
-    
+
+    public static void main(String[] args) {
+        new ViewStudents("faculty1");
+    }
 }
