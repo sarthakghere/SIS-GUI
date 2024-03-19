@@ -48,12 +48,13 @@ public class StudentMenu extends JFrame{
     }
 
     private void handleButtonClick(String buttonName) {
+        dispose();
         switch (buttonName) {
             case "View Information":
                 new ViewInformation(username);
                 break;
             case "View Grades":
-                new ViewGrades();
+                new ViewGrades(username);
                 break;
             case "View Attendance":
                 new ViewAttendance(username);

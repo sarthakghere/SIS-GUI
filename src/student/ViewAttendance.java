@@ -68,7 +68,7 @@ public class ViewAttendance extends JFrame {
 
             while (resultSet.next()) {
                 String date = resultSet.getString("date");
-                String course = resultSet.getString("course_id");
+                String course = resultSet.getString("course_name");
                 String status = resultSet.getString("status");
 
                 attendanceData.append("Date: ").append(date).append(", Course: ").append(course).append(", Status: ").append(status).append("\n");
@@ -92,15 +92,15 @@ public class ViewAttendance extends JFrame {
         int totalClasses = 0;
 
         try (Connection c = SQL.makeConnection();
-             PreparedStatement preparedStatement = c.prepareStatement("SELECT course_id, COUNT(*) AS total_classes, " +
+             PreparedStatement preparedStatement = c.prepareStatement("SELECT course_name, COUNT(*) AS total_classes, " +
                      "SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) AS present_classes " +
-                     "FROM attendance WHERE username = ? GROUP BY course_id")) {
+                     "FROM attendance WHERE username = ? GROUP BY course_name")) {
 
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                String course = resultSet.getString("course_id");
+                String course = resultSet.getString("course_name");
                 int totalClass = resultSet.getInt("total_classes");
                 int presentClasses = resultSet.getInt("present_classes");
 
