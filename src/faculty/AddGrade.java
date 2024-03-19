@@ -18,8 +18,10 @@ public class AddGrade extends JFrame {
     private JDateChooser dateChooser;
     private List<String> studentList;
     private List<JTextField> gradeFields;
+    String username;
 
-    public AddGrade() {
+    public AddGrade(String username) {
+        this.username = username;
         setTitle("Add Grade");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -41,21 +43,37 @@ public class AddGrade extends JFrame {
 
         add(topPanel, BorderLayout.NORTH);
 
-        JPanel middlePanel = new JPanel(new GridLayout(studentList.size(), 2));
-        middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Column 0 for labels
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
         Font studentFont = new Font("Arial", Font.PLAIN, 14);
 
         for (String student : studentList) {
+            gbc.gridy++;
+
+            // Add username label
             JLabel nameLabel = new JLabel(student);
             nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
             nameLabel.setFont(studentFont);
-            middlePanel.add(nameLabel);
+            middlePanel.add(nameLabel, gbc);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
 
+            // Add text field
+            gbc.gridx = 2;
             JTextField gradeField = new JTextField();
             gradeField.setPreferredSize(new Dimension(100, 20)); // Adjust the width and height as needed
             gradeFields.add(gradeField);
-            middlePanel.add(gradeField);
+            middlePanel.add(gradeField, gbc);
+
+            // Reset grid constraints
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.gridx = 0;
         }
 
         JScrollPane scrollPane = new JScrollPane(middlePanel);
@@ -75,6 +93,14 @@ public class AddGrade extends JFrame {
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error while adding grades: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new FacultyMenu(username);
             }
         });
 
@@ -176,6 +202,6 @@ public class AddGrade extends JFrame {
     
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(AddGrade::new);
+        new AddGrade("faculty1");
     }
 }
