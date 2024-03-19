@@ -26,9 +26,9 @@ public class AddAttendance extends JFrame {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(600, 400));
 
-        subjectDropdown = new JComboBox<>(getSubjectList());
+        subjectDropdown = new JComboBox<>(Getters.getSubjects());
         dateChooser = new JDateChooser();
-        studentList = getAllStudents();
+        studentList = Getters.getStudent();
         presentCheckboxes = new ArrayList<>();
         absentCheckboxes = new ArrayList<>();
 
@@ -113,47 +113,6 @@ public class AddAttendance extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    public static String[] getSubjectList() {
-        String[] subjectStrings = null;
-        try (Connection c = SQL.makeConnection();
-        PreparedStatement ps = c.prepareStatement("select * from course")){
-            ResultSet r = ps.executeQuery();
-            ArrayList<String> subs = new ArrayList<>();
-            while(r.next()){
-                String subName = r.getString("course_name");
-                subs.add(subName);
-            }
-            subjectStrings = new String[subs.size()];
-            subs.toArray(subjectStrings);
-
-
-            
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        return subjectStrings;
-    }
-
-    private List<String> getAllStudents() {
-        List<String> usernames = new ArrayList<>();
-        try(Connection c = SQL.makeConnection();
-        PreparedStatement ps = c.prepareStatement("select username from student");){
-            String username;
-
-            ResultSet r = ps.executeQuery();
-
-            while(r.next()){
-                username = r.getString("username");
-                usernames.add(username);
-            }
-            
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(this,e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        return usernames;
     }
 
     private void addStudent(){
