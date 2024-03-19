@@ -2,19 +2,10 @@ package faculty;
 
 import java.sql.*;
 import java.util.*;
+import javax.swing.JOptionPane;
+import common.SQL;
 
-import javax.security.auth.Subject;
-
-import common.SQL;;
-
-public class getSubject {
-    Subject[] subjects;
-    public static void main(String[] args) {
-        String[] subs = getStudent();
-        for(String sub : subs){
-            System.out.println(sub);
-        }
-    }
+public class Getters {
 
     public static String[] getSubjects() {
         String[] subjectStrings = null;
@@ -28,34 +19,27 @@ public class getSubject {
             }
             subjectStrings = new String[subs.size()];
             subs.toArray(subjectStrings);
-
-
-            
+ 
         } catch (Exception e) {
-            // TODO: handle exception
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return subjectStrings;
     }
 
-    public static String[] getStudent() {
-        String[] usernameArray = null;
+    public static List<String> getStudent() {
+        List<String> usernames = new ArrayList<String>();
         try (Connection c = SQL.makeConnection();
         PreparedStatement ps = c.prepareStatement("select * from student")){
             ResultSet r = ps.executeQuery();
-            ArrayList<String> subs = new ArrayList<>();
             while(r.next()){
-                String subName = r.getString("first_name");
-                subs.add(subName);
+                String username = r.getString("username");
+                usernames.add(username);
             }
-            usernameArray = new String[subs.size()];
-            subs.toArray(usernameArray);
 
-
-            
         } catch (Exception e) {
-            // TODO: handle exception
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return usernameArray;
+        return usernames;
     }
     
     

@@ -68,7 +68,7 @@ public class FacultyMenu extends JFrame {
                 new AddGrade(username);
                 break;
             case "Add Student Attendance":
-                new AddAttendance("faculty1");
+                new AddAttendance(username);
                 break;
             case "Update Student Information":
                 // updateStudentInformation();
@@ -78,11 +78,8 @@ public class FacultyMenu extends JFrame {
                 break;
             case "Logout":
                 new Logout(this);
-                
-                // logout();
                 break;
             default:
-                // Handle unknown button click
                 break;
         }
     }

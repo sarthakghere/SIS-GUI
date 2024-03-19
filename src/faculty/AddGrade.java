@@ -1,5 +1,4 @@
 package faculty;
-import com.toedter.calendar.JDateChooser;
 import common.SQL;
 
 import javax.swing.*;
@@ -15,7 +14,6 @@ import java.util.List;
 public class AddGrade extends JFrame {
     private JComboBox<String> courseComboBox;
     private JComboBox<String> testComboBox;
-    private JDateChooser dateChooser;
     private List<String> studentList;
     private List<JTextField> gradeFields;
     String username;
@@ -27,10 +25,9 @@ public class AddGrade extends JFrame {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(600, 400));
 
-        courseComboBox = new JComboBox<>(getCourseList());
+        courseComboBox = new JComboBox<>(Getters.getSubjects());
         testComboBox = new JComboBox<>(new String[]{"CES 1", "CES 2", "Internal 1", "Internal 2"});
-        dateChooser = new JDateChooser();
-        studentList = getAllStudents();
+        studentList = Getters.getStudent();
         gradeFields = new ArrayList<>();
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -38,8 +35,6 @@ public class AddGrade extends JFrame {
         topPanel.add(courseComboBox);
         topPanel.add(new JLabel("Select Test:"));
         topPanel.add(testComboBox);
-        topPanel.add(new JLabel("Select Date:"));
-        topPanel.add(dateChooser);
 
         add(topPanel, BorderLayout.NORTH);
 
@@ -111,40 +106,6 @@ public class AddGrade extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    private String[] getCourseList() {
-        ArrayList<String> subs = new ArrayList<>();
-        String[] subArray = null;
-        try(Connection c = SQL.makeConnection();
-        PreparedStatement ps = c.prepareStatement("select course_name from course");){
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                subs.add(resultSet.getString("course_name"));
-            }
-            subArray = new String[subs.size()];
-            subs.toArray(subArray);
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        return subArray;
-    }
-
-    private List<String> getAllStudents() {
-        ArrayList<String> students = new ArrayList<>();
-        try (Connection c = SQL.makeConnection();
-        PreparedStatement ps = c.prepareStatement("select username from student")){
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                students.add(resultSet.getString("username"));
-            }
-            
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        System.out.println(students);
-        return students; 
     }
 
     private void addGradesToDatabase() throws Exception {

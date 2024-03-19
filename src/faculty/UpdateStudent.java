@@ -1,5 +1,8 @@
 package faculty;
 
-public class UpdateStudent {
+import javax.swing.JFrame;
+
+public class UpdateStudent extends JFrame{
+    
     
 }
