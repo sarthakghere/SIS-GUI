@@ -75,6 +75,11 @@ public class LoginWindow extends JFrame {
                             new FacultyMenu(username);
                             break;
 
+                        case "Admin":
+                            dispose();
+                            new admin.AdminMenu(username);
+                            break;
+
                         default:
                             // Handle other roles or leave it empty
                             break;

@@ -1,6 +1,5 @@
 package faculty;
 import com.toedter.calendar.JDateChooser;
-
 import common.SQL;
 import java.sql.*;
 import javax.swing.*;

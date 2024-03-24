@@ -1,4 +1,4 @@
-package faculty;
+package admin;
 
 import common.ChangePassword;
 import java.awt.*;
@@ -7,31 +7,34 @@ import java.awt.event.ActionListener;
 import common.*;
 import javax.swing.*;
 
-public class FacultyMenu extends JFrame {
+public class AdminMenu extends JFrame {
     private final String username;
-
-    public FacultyMenu(String username) {
+    public AdminMenu(String username) {
         this.username = username;
         setTitle("Faculty Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(7, 1));
         setPreferredSize(new Dimension(500, 400));
 
-        JButton viewInfoButton = createStyledButton("View Information");
+        JButton viewAllFacultyButton = createStyledButton("View All Faculties");
+        JButton addFacultyButton = createStyledButton("Add Faculty");
+        JButton updateFacultyInfoButton = createStyledButton("Update Faculty Information");
+        JButton addCourseButton = createStyledButton("Add Course");
+        JButton viewAllCourseButton = createStyledButton("View All Courses");
         JButton viewAllStudentsButton = createStyledButton("View All Students");
-        JButton addStudentButton = createStyledButton("Add Student");
-        JButton addGradeButton = createStyledButton("Add Student Grade");
-        JButton addStudentAttendanceButton = createStyledButton("Add Student Attendance");
-        JButton updateStudentInfoButton = createStyledButton("Update Student Information");
+        JButton updateStudentsInfoButton = createStyledButton("Update Student Information");
         JButton changePasswordButton = createStyledButton("Change Password");
         JButton logoutButton = createStyledButton("Logout");
+        JButton updateCourseButton = createStyledButton("Update Course");
 
-        add(viewInfoButton);
+        add(viewAllFacultyButton);
+        add(addFacultyButton);
+        add(updateFacultyInfoButton);
+        add(viewAllCourseButton);
+        add(addCourseButton);
+        add(updateCourseButton);
         add(viewAllStudentsButton);
-        add(addStudentButton);
-        add(addGradeButton);
-        add(addStudentAttendanceButton);
-        add(updateStudentInfoButton);
+        add(updateStudentsInfoButton);
         add(changePasswordButton);
         add(logoutButton);
 
@@ -55,20 +58,17 @@ public class FacultyMenu extends JFrame {
 
     private void handleButtonClick(String buttonName) {
         switch (buttonName) {
-            case "View Information":
-                new ViewInformation(username);
+            case "View All Faculties":
+                new ViewFaculties(username);
+                break;
+            case "Add Faculty":
+                new AddFaculty(username);
+                break;
+            case "Update Faculty Information":
+                new UpdateFaculty(username);
                 break;
             case "View All Students":
                 new ViewStudents(username);
-                break;
-            case "Add Student":
-                new AddStudent(username);
-                break;
-            case "Add Student Grade":
-                new AddGrade(username);
-                break;
-            case "Add Student Attendance":
-                new AddAttendance(username);
                 break;
             case "Update Student Information":
                 new UpdateStudent(username);
@@ -79,11 +79,19 @@ public class FacultyMenu extends JFrame {
             case "Logout":
                 new Logout(this);
                 break;
+            case "View All Courses":
+                new ViewCourse(username);
+                break;
+            case "Add Course":
+                new AddCourse(username);
+                break;
+            case "Update Course":
+                System.exit(ABORT);
             default:
                 break;
         }
     }
     public static void main(String[] args) {
-        new FacultyMenu("faculty1");
+        new AdminMenu("admin");
     }
 }
