@@ -26,16 +26,4 @@ public class Getters {
         }
         return subjectStrings;
     }
-
-    public static void getStudents(){
-
-    }
-
-    public static void getSubject(){
-
-    }
-
-    public static void getStudent(){
-        
-    }
 }

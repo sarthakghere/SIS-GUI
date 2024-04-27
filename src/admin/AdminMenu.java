@@ -85,8 +85,6 @@ public class AdminMenu extends JFrame {
             case "Add Course":
                 new AddCourse(username);
                 break;
-            case "Update Course":
-                System.exit(ABORT);
             default:
                 break;
         }
