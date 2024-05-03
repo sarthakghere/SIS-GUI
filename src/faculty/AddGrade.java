@@ -86,7 +86,7 @@ public class AddGrade extends JFrame {
                     addGradesToDatabase();
                     JOptionPane.showMessageDialog(null, "Grades added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error while adding grades: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Fill All the fields", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -117,6 +117,13 @@ public class AddGrade extends JFrame {
                 String student = studentList.get(i);
                 int grade = Integer.parseInt(gradeFields.get(i).getText());
     
+                // Validate CES and Internal marks
+                if ((test.equals("CES 1") || test.equals("CES 2")) && (grade < 0 || grade > 10)) {
+                    throw new Exception("CES marks must be between 0 and 10.");
+                } else if ((test.equals("Internal 1") || test.equals("Internal 2")) && (grade < 0 || grade > 40)) {
+                    throw new Exception("Internal marks must be between 0 and 40.");
+                }
+    
                 // Fetch course_id from the course table
                 String courseIdQuery = "SELECT course_id FROM course WHERE course_name = ?";
                 try (PreparedStatement courseIdPs = c.prepareStatement(courseIdQuery)) {
@@ -133,20 +140,46 @@ public class AddGrade extends JFrame {
                             if (studentIdRs.next()) {
                                 String studentId = studentIdRs.getString("student_id");
     
-                                // Insert grade record into the database
-                                String insertQuery = "INSERT INTO grades(course_id, student_id, grade, username, Type) VALUES (?, ?, ?, ?, ?)";
-                                try (PreparedStatement ps = c.prepareStatement(insertQuery)) {
-                                    ps.setString(1, courseId);
-                                    ps.setString(2, studentId);
-                                    ps.setInt(3, grade);
-                                    ps.setString(4, student);
-                                    ps.setString(5, test);
+                                // Check if a record with the same course, student, and test type already exists
+                                String existingGradeQuery = "SELECT * FROM grades WHERE course_id = ? AND student_id = ? AND Type = ?";
+                                try (PreparedStatement existingGradePs = c.prepareStatement(existingGradeQuery)) {
+                                    existingGradePs.setString(1, courseId);
+                                    existingGradePs.setString(2, studentId);
+                                    existingGradePs.setString(3, test);
+                                    ResultSet existingGradeRs = existingGradePs.executeQuery();
     
-                                    int rowsAffected = ps.executeUpdate();
-                                    if (rowsAffected > 0) {
-                                        System.out.println("Grade added");
+                                    if (existingGradeRs.next()) {
+                                        // If a record exists, update the grade
+                                        String updateQuery = "UPDATE grades SET grade = ? WHERE course_id = ? AND student_id = ? AND Type = ?";
+                                        try (PreparedStatement updatePs = c.prepareStatement(updateQuery)) {
+                                            updatePs.setInt(1, grade);
+                                            updatePs.setString(2, courseId);
+                                            updatePs.setString(3, studentId);
+                                            updatePs.setString(4, test);
+                                            int rowsAffected = updatePs.executeUpdate();
+                                            if (rowsAffected > 0) {
+                                                System.out.println("Grade updated");
+                                            } else {
+                                                System.out.println("Failed to update grade");
+                                            }
+                                        }
                                     } else {
-                                        System.out.println("Failed to add grade");
+                                        // If no record exists, insert the grade
+                                        String insertQuery = "INSERT INTO grades(course_id, student_id, grade, username, Type) VALUES (?, ?, ?, ?, ?)";
+                                        try (PreparedStatement ps = c.prepareStatement(insertQuery)) {
+                                            ps.setString(1, courseId);
+                                            ps.setString(2, studentId);
+                                            ps.setInt(3, grade);
+                                            ps.setString(4, student);
+                                            ps.setString(5, test);
+    
+                                            int rowsAffected = ps.executeUpdate();
+                                            if (rowsAffected > 0) {
+                                                System.out.println("Grade added");
+                                            } else {
+                                                System.out.println("Failed to add grade");
+                                            }
+                                        }
                                     }
                                 }
                             } else {
@@ -160,6 +193,7 @@ public class AddGrade extends JFrame {
             }
         }
     }
+    
     
 
     public static void main(String[] args) {

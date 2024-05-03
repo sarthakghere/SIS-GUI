@@ -48,21 +48,25 @@ public class StudentMenu extends JFrame{
     }
 
     private void handleButtonClick(String buttonName) {
-        dispose();
+        
         switch (buttonName) {
             case "View Information":
+                dispose();
                 new ViewInformation(username);
                 break;
             case "View Grades":
+                dispose();
                 new ViewGrades(username);
                 break;
             case "View Attendance":
+                dispose();
                 new ViewAttendance(username);
                 break;
             case "Change Password":
                 new common.ChangePassword(username);
                 break;
             case "Logout":
+                dispose();
                 new common.Logout(this);
                 break;
             default:

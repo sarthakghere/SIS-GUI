@@ -5,7 +5,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bd09b4e-5c5f-40fb-a034-998cdba08267" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/AddCourse$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/AddCourse$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/AddCourse.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/AddCourse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/AddFaculty$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/AddFaculty$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/AddFaculty.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/AddFaculty.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/AdminMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/AdminMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/UpdateFaculty.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/UpdateFaculty.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/UpdateStudent.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/UpdateStudent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/ViewCourse.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/ViewCourse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/ViewFaculties.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/ViewFaculties.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/admin/ViewStudents.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/admin/ViewStudents.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/common/Auth.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/common/Auth.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/common/ChangePassword$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/common/ChangePassword$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/common/ChangePassword.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/common/ChangePassword.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/common/Getters.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/common/Getters.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/common/LoginWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/common/LoginWindow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/common/Logout.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/common/Logout.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/AddAttendance.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/AddAttendance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/AddGrade$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/AddGrade$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/AddGrade.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/AddGrade.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/AddStudent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/AddStudent$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/AddStudent.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/AddStudent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/FacultyMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/FacultyMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/Getters.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/Getters.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/UpdateStudent.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/UpdateStudent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewInformation.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/ViewInformation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/faculty/ViewStudents.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/faculty/ViewStudents.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/student/StudentMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/student/StudentMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/student/ViewAttendance$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/student/ViewAttendance$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/student/ViewAttendance$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/student/ViewAttendance$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/student/ViewAttendance.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/student/ViewAttendance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/student/ViewGrades.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/student/ViewGrades.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/student/ViewInformation$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/student/ViewInformation$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/student/ViewInformation.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/student/ViewInformation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/admin/AddFaculty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/admin/AddFaculty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/ChangePassword.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/ChangePassword.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/faculty/AddAttendance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/faculty/AddAttendance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/faculty/AddGrade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/faculty/AddGrade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/faculty/FacultyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/faculty/FacultyMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/faculty/UpdateStudent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/faculty/UpdateStudent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/student/StudentMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/student/StudentMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/student/ViewAttendance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/student/ViewAttendance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/student/ViewInformation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/student/ViewInformation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

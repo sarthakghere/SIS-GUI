@@ -84,6 +84,21 @@ public class AddStudent extends JFrame {
                     JOptionPane.showMessageDialog(addStudentFrame, "Username already exists. Please choose a different username", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                
+                if(!isValidEmailFormat(email)){
+                    JOptionPane.showMessageDialog(addStudentFrame, "Enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (isEmailExists(email)) {
+                    JOptionPane.showMessageDialog(addStudentFrame, "Email already exists. Please choose a different email", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                // Check if phone number already exists
+                if (isPhoneExists(phone)) {
+                    JOptionPane.showMessageDialog(addStudentFrame, "Phone number already exists. Please choose a different phone number", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
                 addStudentToDatabase(firstName, lastName, email, phone, username, birthdate, enrollmentDate);
 
@@ -168,6 +183,40 @@ public class AddStudent extends JFrame {
             return true;
         }
     }
+    
+    private boolean isEmailExists(String email) {
+        try (Connection c = SQL.makeConnection();
+             PreparedStatement ps = c.prepareStatement("SELECT * FROM student WHERE email = ?")) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "SQL Error " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+    }
+    
+    private boolean isPhoneExists(String phone) {
+        try (Connection c = SQL.makeConnection();
+             PreparedStatement ps = c.prepareStatement("SELECT * FROM student WHERE phone_number = ?")) {
+            ps.setString(1, phone);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "SQL Error " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+    }
+
+
+    private boolean isValidEmailFormat(String email) {
+        // Regular expression for validating email addresses
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
+    
     public static void main(String[] args) {
         new AddStudent("faculty1");
     }

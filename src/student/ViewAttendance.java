@@ -43,6 +43,7 @@ public class ViewAttendance extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
+                new StudentMenu(username);
             }
         });
 

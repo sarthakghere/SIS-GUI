@@ -132,9 +132,33 @@ public class UpdateStudent extends JFrame {
     }
 
     private void saveChanges() {
+        if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() || 
+        emailField.getText().isEmpty() || phoneField.getText().isEmpty() ||
+        enrollmentDateField.getDate() == null || birthDateChooser.getDate() == null) {
+        JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Incomplete Information", JOptionPane.WARNING_MESSAGE);
+        return; // Exit the method without saving
+    }
+
+        String email = emailField.getText();
+        if (!isValidEmail(email)) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid email address.", "Invalid Email", JOptionPane.WARNING_MESSAGE);
+            return; // Exit the method without saving
+        }
+        String selectedStudent = usernames.get(studentComboBox.getSelectedIndex());
+        String currentEmail = getEmailByUsername(selectedStudent);
+        if (!currentEmail.equals(email) && isDuplicateEmail(email)) {
+            JOptionPane.showMessageDialog(this, "Email address already exists in the database.", "Duplicate Email", JOptionPane.WARNING_MESSAGE);
+            return; // Exit the method without saving
+        }
+
+        String phone = phoneField.getText();
+        if (!isValidPhoneNumber(phone)) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid phone number (10 digits).", "Invalid Phone Number", JOptionPane.WARNING_MESSAGE);
+            return; // Exit the method without saving
+        }
         // Save the changes made to the student's information in the database
         // Example code
-        String selectedStudent = usernames.get(studentComboBox.getSelectedIndex());
+        // String selectedStudent = usernames.get(studentComboBox.getSelectedIndex());
         String newFirstName = firstNameField.getText();
         String newLastName = lastNameField.getText();
         String newEmail = emailField.getText();
@@ -162,6 +186,46 @@ public class UpdateStudent extends JFrame {
         }
     }
 
+    private boolean isValidEmail(String email) {
+        // Regular expression for email validation
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
+
+    private boolean isDuplicateEmail(String email) {
+        try (Connection c = SQL.makeConnection();
+             PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) AS count FROM student WHERE email=?")) {
+            ps.setString(1, email);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt("count");
+                return count > 0;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An error occurred while checking for duplicate email: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
+    }
+
+    private String getEmailByUsername(String username) {
+        String email = "";
+        try (Connection c = SQL.makeConnection();
+             PreparedStatement ps = c.prepareStatement("SELECT email FROM student WHERE username=?")) {
+            ps.setString(1, username);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                email = resultSet.getString("email");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An error occurred while retrieving email from the database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return email;
+    }
+
+    private boolean isValidPhoneNumber(String phone) {
+        // Check if the phone number consists of exactly 10 digits
+        return phone.matches("\\d{10}");
+    }
     public static void main(String[] args) {
         new UpdateStudent("faculty1");
     }

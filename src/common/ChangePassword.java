@@ -81,7 +81,6 @@ public class ChangePassword extends JFrame{
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Close the changePassFrame
                 dispose();
             }
         });

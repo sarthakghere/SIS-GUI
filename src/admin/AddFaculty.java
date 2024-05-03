@@ -15,7 +15,7 @@ public class AddFaculty extends JFrame {
 
     public AddFaculty(String username) {
         this.username = username;
-        JFrame addStudentFrame = new JFrame("Add Student");
+        JFrame addStudentFrame = new JFrame("Add Faculty");
         addStudentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addStudentFrame.setLayout(new GridLayout(8, 2));
         addStudentFrame.setPreferredSize(new Dimension(400, 300));

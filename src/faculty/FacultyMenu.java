@@ -62,6 +62,7 @@ public class FacultyMenu extends JFrame {
                 new ViewStudents(username);
                 break;
             case "Add Student":
+                dispose();
                 new AddStudent(username);
                 break;
             case "Add Student Grade":

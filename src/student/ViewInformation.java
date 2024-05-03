@@ -46,7 +46,7 @@ public class ViewInformation extends JFrame{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         infoDialog.dispose(); // Close the dialog
-                        // Additional actions for Back button if needed
+                        new StudentMenu(username);
                     }
                 });
     
