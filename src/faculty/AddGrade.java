@@ -1,4 +1,5 @@
 package faculty;
+
 import common.SQL;
 
 import javax.swing.*;
@@ -30,50 +31,45 @@ public class AddGrade extends JFrame {
         studentList = Getters.getStudent();
         gradeFields = new ArrayList<>();
 
+        // Create top panel with course and test selection
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.add(new JLabel("Select Course:"));
         topPanel.add(courseComboBox);
         topPanel.add(new JLabel("Select Test:"));
         topPanel.add(testComboBox);
-
         add(topPanel, BorderLayout.NORTH);
 
+        // Create middle panel to display student names and grade input fields
         JPanel middlePanel = new JPanel();
         middlePanel.setLayout(new GridBagLayout());
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; // Column 0 for labels
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
-
         Font studentFont = new Font("Arial", Font.PLAIN, 14);
-
         for (String student : studentList) {
             gbc.gridy++;
-
             // Add username label
             JLabel nameLabel = new JLabel(student);
             nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
             nameLabel.setFont(studentFont);
             middlePanel.add(nameLabel, gbc);
             gbc.fill = GridBagConstraints.HORIZONTAL;
-
-            // Add text field
+            // Add text field for entering grade
             gbc.gridx = 2;
             JTextField gradeField = new JTextField();
             gradeField.setPreferredSize(new Dimension(100, 20)); // Adjust the width and height as needed
             gradeFields.add(gradeField);
             middlePanel.add(gradeField, gbc);
-
             // Reset grid constraints
             gbc.fill = GridBagConstraints.NONE;
             gbc.gridx = 0;
         }
-
         JScrollPane scrollPane = new JScrollPane(middlePanel);
         add(scrollPane, BorderLayout.CENTER);
 
+        // Create bottom panel with cancel and submit buttons
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton cancelButton = new JButton("Cancel");
         JButton submitButton = new JButton("Submit");
@@ -91,6 +87,7 @@ public class AddGrade extends JFrame {
             }
         });
 
+        // Add action listener to the cancel button
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,22 +105,21 @@ public class AddGrade extends JFrame {
         setVisible(true);
     }
 
+    // Method to add grades to the database
     private void addGradesToDatabase() throws Exception {
         try (Connection c = SQL.makeConnection()) {
             String course = (String) courseComboBox.getSelectedItem();
             String test = (String) testComboBox.getSelectedItem();
-    
+            // Iterate through students to add grades
             for (int i = 0; i < studentList.size(); i++) {
                 String student = studentList.get(i);
                 int grade = Integer.parseInt(gradeFields.get(i).getText());
-    
                 // Validate CES and Internal marks
                 if ((test.equals("CES 1") || test.equals("CES 2")) && (grade < 0 || grade > 10)) {
                     throw new Exception("CES marks must be between 0 and 10.");
                 } else if ((test.equals("Internal 1") || test.equals("Internal 2")) && (grade < 0 || grade > 40)) {
                     throw new Exception("Internal marks must be between 0 and 40.");
                 }
-    
                 // Fetch course_id from the course table
                 String courseIdQuery = "SELECT course_id FROM course WHERE course_name = ?";
                 try (PreparedStatement courseIdPs = c.prepareStatement(courseIdQuery)) {
@@ -131,7 +127,6 @@ public class AddGrade extends JFrame {
                     ResultSet courseIdRs = courseIdPs.executeQuery();
                     if (courseIdRs.next()) {
                         String courseId = courseIdRs.getString("course_id");
-    
                         // Fetch student_id from the student table
                         String studentIdQuery = "SELECT student_id FROM student WHERE username = ?";
                         try (PreparedStatement studentIdPs = c.prepareStatement(studentIdQuery)) {
@@ -139,7 +134,6 @@ public class AddGrade extends JFrame {
                             ResultSet studentIdRs = studentIdPs.executeQuery();
                             if (studentIdRs.next()) {
                                 String studentId = studentIdRs.getString("student_id");
-    
                                 // Check if a record with the same course, student, and test type already exists
                                 String existingGradeQuery = "SELECT * FROM grades WHERE course_id = ? AND student_id = ? AND Type = ?";
                                 try (PreparedStatement existingGradePs = c.prepareStatement(existingGradeQuery)) {
@@ -147,7 +141,6 @@ public class AddGrade extends JFrame {
                                     existingGradePs.setString(2, studentId);
                                     existingGradePs.setString(3, test);
                                     ResultSet existingGradeRs = existingGradePs.executeQuery();
-    
                                     if (existingGradeRs.next()) {
                                         // If a record exists, update the grade
                                         String updateQuery = "UPDATE grades SET grade = ? WHERE course_id = ? AND student_id = ? AND Type = ?";
@@ -172,7 +165,6 @@ public class AddGrade extends JFrame {
                                             ps.setInt(3, grade);
                                             ps.setString(4, student);
                                             ps.setString(5, test);
-    
                                             int rowsAffected = ps.executeUpdate();
                                             if (rowsAffected > 0) {
                                                 System.out.println("Grade added");
@@ -193,9 +185,8 @@ public class AddGrade extends JFrame {
             }
         }
     }
-    
-    
 
+    // Main method to start the application
     public static void main(String[] args) {
         new AddGrade("faculty1");
     }
