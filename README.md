@@ -11,7 +11,6 @@ The Student Information System (SIS) is a Java GUI application developed as a mi
   - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 - Student Registration: Faculty can register new students, capturing essential information like name, email, phone number, birthdate, and enrollment date.
